@@ -1,0 +1,17 @@
+﻿@model IEnumerable<VideoWorld.Models.Statement>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Statement History</h2>
+
+<div class="statements">
+@foreach (var statement in Model) {
+    <div class="statement">
+        <pre>
+        @statement.Text        
+        </pre>
+    </div>
+}
+</div>

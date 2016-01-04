@@ -1,0 +1,20 @@
+﻿@model VideoWorld.Models.HomePageModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="cart">
+   @Model.Cart.Count item(s) in your cart.
+</div>
+
+<div class="movies">
+@foreach (var item in Model.Movies) {    
+    <div class="movie">
+        <span class="title">@item.Title</span>
+        <form method="post" action="/cart"><input type="submit" class="addToCart" name="addToCart" value="Add"/><input type="hidden" name="title" value="@item.Title"/></form>
+    </div>
+}
+</div>

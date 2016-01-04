@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- first, define your individual @Configuration classes as beans -->
+    <bean class="com.thoughtworks.videorental.spring.VideoRentalConfiguration"/>
+
+    <!-- be sure to include the JavaConfig bean post-processor -->
+    <bean class="org.springframework.config.java.process.ConfigurationPostProcessor"/>
+</beans>

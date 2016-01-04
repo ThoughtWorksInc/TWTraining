@@ -1,0 +1,10 @@
+.DS_Store
+bin
+target
+acceptance/bin
+acceptance/.settings/
+acceptance/logs/
+acceptance/sahi/userdata/browser
+acceptance/sahi/userdata/certs
+acceptance/sahi/userdata/logs
+.idea/workspace.xml

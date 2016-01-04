@@ -1,0 +1,55 @@
+<component name="libraryTable">
+  <library name="Twist libraries">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/ant-junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/ant-sahi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/ant.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/bcmail-jdk15-146.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/bcprov-jdk15-146.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.springsource.net.sf.ezmorph_1.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.springsource.net.sf.json_2.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.springsource.org.aopalliance_1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.springsource.org.apache.commons.beanutils_1.8.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.springsource.org.apache.commons.collections_3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.springsource.org.apache.commons.logging_1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.ognl_2.7.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.org.apache.ecs_1.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.org.jboss.javassist_3.7.0.GA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.core_13.2.0.13193-028f6c1e74ed51.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.driver.core_13.2.0.13193-028f6c1e74ed51.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.language.common_13.2.0.13193-028f6c1e74ed51.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.language.core_13.2.0.13193-028f6c1e74ed51.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.language.java_13.2.0.13193-028f6c1e74ed51.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/jetty-6.1.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/jetty-sslengine-6.1.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/jetty-start-6.1.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/jetty-util-6.1.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.commons.codec_1.3.0.v201101211617.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.commons.jexl_1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.commons.lang_2.4.0.v201005080502.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.log4j_1.2.13.v200903072027.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.mina.core_2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.velocity_1.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.hamcrest.core_1.1.0.v20090501071000.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.slf4j_1.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.aop_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.asm_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.beans_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.context.support_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.context_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.core_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.springframework.expression_3.1.0.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/sahi.jar!/" />
+      <root url="file://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.driver.sahi_3.0.0.13193-028f6c1e74ed51" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.driver.sahi_3.0.0.13193-028f6c1e74ed51/sahi/docs/java_client" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/acceptance/twist-libs/org.apache.mina.core_2.0.0.jar!/" />
+      <root url="file://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.driver.sahi_3.0.0.13193-028f6c1e74ed51/sahi/test" />
+      <root url="file://$PROJECT_DIR$/acceptance/twist-libs/com.thoughtworks.twist.driver.sahi_3.0.0.13193-028f6c1e74ed51/sahi/sample_java_project/src" />
+    </SOURCES>
+  </library>
+</component>

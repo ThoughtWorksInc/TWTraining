@@ -1,0 +1,16 @@
+Tags:
+Preconditions:
+Login:
+#login as "James Madison"
+
+Renting a Movie:
+#choose movie "Up In The Air"
+#choose movie "Avatar"
+#click next
+#choose "2" days
+#click done
+#verify that receipt contains "Amount charged is $8.0"
+#verify that receipt contains "You have a new total of 3 frequent renter points"
+
+
+

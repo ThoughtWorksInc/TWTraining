@@ -1,0 +1,23 @@
+@model VideoWorld.Models.Cart
+
+@{
+    ViewBag.Title = "Cart";
+}
+
+<h2>Your Shopping Cart</h2>
+
+<div class="rentals">
+@foreach (var item in Model.Rentals) {    
+    <div class="rental">
+        <span class="title">@item.Movie.Title</span>
+        <span class="period">@item.Period</span>
+    </div>
+}
+</div>
+
+<div class="checkout_form">
+    <form method="post" action="/statements">
+        <input type="submit" name="checkout" class="checkout" value="Checkout" />
+    </form>
+</div>
+    

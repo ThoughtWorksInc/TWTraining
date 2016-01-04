@@ -1,0 +1,17 @@
+h1. ReadMe
+
+This file needs to be expanded
+
+h2. Frameworks
+
+* Struts -- struts.apache.org
+* JUnit -- junit.org
+* Freemarker -- freemarker.sourceforge.net
+* Ant -- ant.apache.org
+* Jetty -- jetty.codehaus.org
+
+h2. Patterns and Practices
+
+* MVC -- http://en.wikipedia.org/wiki/Model-view-controller
+* Unit testing -- http://en.wikipedia.org/wiki/Unit_testing
+

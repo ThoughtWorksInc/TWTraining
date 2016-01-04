@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.devMode" value="false"/>
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
+	<constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />
+
+	<package name="videorental" extends="struts-default">
+        <interceptors>
+            <interceptor name="login" class="customerLoginInterceptor" />
+            <interceptor-stack name="defaultLoginStack">
+	            <interceptor-ref name="login"/>
+	            <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        
+        <default-interceptor-ref name="defaultLoginStack" />
+        
+        <global-results>
+            <result name="login" type="redirect">login</result>
+        </global-results>
+        
+		<action name="" class="viewHomeAction">
+			<result type="freemarker">home.ftl</result>
+		</action>
+		
+		<action name="login" class="loginAction">
+			<result name="login" type="freemarker">login.ftl</result>
+			<result name="success" type="redirect">/</result>
+		</action>
+		
+		<action name="logout" class="logoutAction">
+			<result name="success" type="redirect">/</result>
+		</action>
+		
+		<action name="history" class="viewHistoryAction">
+			<result type="freemarker">history.ftl</result>
+		</action>
+				
+		<action name="rentals" class="viewCurrentRentalsAction">
+			<result type="freemarker">rentals.ftl</result>
+		</action>
+		
+		<action name="rentMovies" class="rentMoviesAction">
+			<result type="freemarker">statement.ftl</result>
+		</action>
+
+		<action name="admin" class="viewAdminAction">
+			<result type="freemarker">admin.ftl</result>
+		</action>
+	</package>
+</struts>

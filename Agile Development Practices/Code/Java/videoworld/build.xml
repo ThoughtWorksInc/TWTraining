@@ -1,0 +1,310 @@
+<project name="videorental" default="build">
+
+    <property environment="env"/>
+    <property name="app.name" value="${ant.project.name}"/>
+
+    <!-- Source Directories -->
+    <property name="src.dir" value="${basedir}/src" />
+    <property name="twist.dir" value="${basedir}/acceptance" />
+
+    <property name="main.src.dir" value="${src.dir}/main/java"/>
+    <property name="main.resources.dir" value="${src.dir}/main/resources"/>
+    <property name="util.src.dir" value="${src.dir}/util/java"/>
+    <property name="unit.src.dir" value="${src.dir}/unit/java"/>
+    <property name="twist.src.dir" value="${twist.dir}/src" />
+
+    <property name="webapp.dir" value="${basedir}/src/main/webapp"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="twist.lib.dir" value="${twist.dir}/twist-libs"/>
+
+    <property name="env.CRUISE_PIPELINE_LABEL" value="dev"/>
+    <property name="build.label" value="${env.CRUISE_PIPELINE_LABEL}"/>
+
+    <!-- Output Directories -->
+    <property name="target.dir" value="${basedir}/target"/>
+    <property name="classes.dir" value="${target.dir}/classes"/>
+    <property name="dist.dir" value="${target.dir}/dist"/>
+    <property name="reports.dir" value="${target.dir}/reports"/>
+
+    <!-- Output Files -->
+    <property name="main.war" value="${dist.dir}/${app.name}-${build.label}.war"/>
+    <property name="main.jar" value="${target.dir}/${app.name}.jar"/>
+    <property name="util.jar" value="${target.dir}/${app.name}-util.jar"/>
+    <property name="unit.jar" value="${target.dir}/${app.name}-unit.jar"/>
+    <property name="twist-fixtures.jar" value="${target.dir}/${app.name}-twist-fixtures.jar"/>
+
+    <!-- Testing -->
+    <property name="application.host" value="localhost"/>
+    <property name="application.port" value="8080"/>
+    <property name="application.twist_port" value="8081"/>
+    <property name="application.twist_stop_port" value="8082"/>
+    <property name="application.url" value="http://${application.host}:${application.port}/${app.name}/"/>
+
+    <!-- Paths -->
+    <fileset id="runtime.libraries" dir="${lib.dir}/runtime" includes="*.jar"/>
+    <fileset id="build.libraries" dir="${lib.dir}/build" includes="*.jar"/>
+    <fileset id="tools.libraries" dir="${lib.dir}/tools" includes="*.jar"/>
+
+    <path id="twist.libraries">
+        <fileset dir="${twist.lib.dir}"
+                 includes="*.jar"
+                 description="include all jars" />
+        <dirset dir="${twist.lib.dir}"
+                includes="*"
+                description="include all class folders, etc" />
+    </path>
+
+
+    <path id="main.build.classpath">
+        <fileset refid="runtime.libraries"/>
+        <fileset refid="build.libraries"/>
+    </path>
+
+    <path id="util.build.classpath">
+        <fileset refid="tools.libraries"/>
+    </path>
+
+    <path id="util.runtime.classpath">
+        <fileset refid="build.libraries"/>
+        <path refid="util.build.classpath"/>
+        <pathelement location="${util.jar}"/>
+    </path>
+
+    <path id="unit.build.classpath">
+        <pathelement location="${main.jar}"/>
+        <path refid="main.build.classpath"/>
+        <fileset refid="tools.libraries"/>
+    </path>
+
+    <path id="unit.runtime.classpath">
+        <path refid="unit.build.classpath"/>
+        <pathelement location="${unit.jar}"/>
+    </path>
+
+    <path id="twist-fixtures.build.classpath">
+        <pathelement location="${util.jar}"/>
+        <path refid="twist.libraries"/>
+    </path>
+
+    <path id="twist.runtime.classpath">
+        <pathelement location="${twist-fixtures.jar}"/>
+        <path refid="util.runtime.classpath"/>
+        <path refid="twist.libraries"/>
+    </path>
+
+    <path id="jetty.runtime.classpath">
+        <path refid="util.runtime.classpath"/>
+    </path>
+
+    <!-- TaskDefs -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/tools/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+    <taskdef classname="com.thoughtworks.twist.core.execution.ant.ExecuteScenariosTask" name="twist.runner">
+        <classpath>
+            <fileset dir="${twist.lib.dir}" includes="*.jar"/>
+        </classpath>
+    </taskdef>
+
+    <!-- MacroDefs -->
+    <macrodef name="compileToJar">
+        <attribute name="srcdir"/>
+        <attribute name="destfile"/>
+        <attribute name="classpathref"/>
+        <sequential>
+            <outofdate>
+                <sourcefiles>
+                    <pathelement path="build.xml"/>
+                    <fileset dir="@{srcdir}"/>
+                </sourcefiles>
+                <targetfiles path="@{destfile}"/>
+                <sequential>
+                    <mkdir dir="${classes.dir}"/>
+                    <javac srcdir="@{srcdir}" destdir="${classes.dir}"
+                           classpathref="@{classpathref}" source="1.6"
+                           target="1.6" debug="true"
+                           includeantruntime="false"/>
+                    <jar destfile="@{destfile}" basedir="${classes.dir}">
+                        <manifest>
+                            <attribute name="Build-Label"
+                                       value="${build.label}"/>
+                        </manifest>
+                    </jar>
+                    <delete dir="${classes.dir}"/>
+                </sequential>
+            </outofdate>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="jettyStartServer">
+        <attribute name="war"/>
+        <attribute name="port" default="${application.port}"/>
+        <attribute name="stop-port" default="0"/>
+        <attribute name="spawn" default="false"/>
+        <sequential>
+            <echo message="starting jetty"/>
+            <java classname="com.thoughtworks.jetty.JettyServer"
+                  classpathref="jetty.runtime.classpath" fork="true" spawn="@{spawn}">
+                <arg value="start"/>
+                <arg value="@{war}"/>
+                <arg value="@{port}"/>
+                <arg value="@{stop-port}"/>
+            </java>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="jettyStopServer">
+        <attribute name="war"/>
+        <attribute name="port"/>
+        <attribute name="stop-port" default="0"/>
+        <sequential>
+            <echo message="stopping jetty"/>
+            <java classname="com.thoughtworks.jetty.JettyServer"
+                  classpathref="jetty.runtime.classpath">
+                <arg value="stop"/>
+                <arg value="@{war}"/>
+                <arg value="@{port}"/>
+                <arg value="@{stop-port}"/>
+            </java>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="testAndReport">
+        <attribute name="type"/>
+        <attribute name="srcdir"/>
+        <attribute name="classpathref"/>
+        <sequential>
+            <mkdir dir="${reports.dir}/@{type}"/>
+            <junit printsummary="yes" fork="true" haltonerror="false"
+                   haltonfailure="false" forkmode="once">
+                <classpath>
+                    <path refid="@{classpathref}"/>
+                </classpath>
+                <formatter type="xml"/>
+
+                <batchtest todir="${reports.dir}/@{type}"
+                           failureproperty="@{type}.test.failed">
+                    <fileset dir="@{srcdir}">
+                        <include name="**/*Test.java"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+
+            <mkdir dir="${reports.dir}/@{type}-html"/>
+
+            <junitreport todir="${reports.dir}/@{type}-html">
+                <fileset dir="${reports.dir}/@{type}">
+                    <include name="TEST-*.xml"/>
+                </fileset>
+                <report format="frames" todir="${reports.dir}/@{type}-html"/>
+            </junitreport>
+
+            <fail if="@{type}.test.failed" message="@{type} tests failed"/>
+        </sequential>
+    </macrodef>
+
+    <!-- Targets -->
+    <target name="clean">
+        <delete dir="${target.dir}"/>
+        <delete dir="${twist.dir}/logs"/>
+    </target>
+
+    <target name="jar">
+        <compileToJar srcdir="${main.src.dir}"
+                      destfile="${main.jar}"
+                      classpathref="main.build.classpath"/>
+    </target>
+
+    <target name="util-jar">
+        <compileToJar srcdir="${util.src.dir}"
+                      destfile="${util.jar}"
+                      classpathref="util.build.classpath"/>
+    </target>
+
+    <target name="unit-jar" depends="jar">
+        <compileToJar srcdir="${unit.src.dir}"
+                      destfile="${unit.jar}"
+                      classpathref="unit.build.classpath"/>
+    </target>
+
+    <target name="twist-fixtures-jar" depends="util-jar">
+        <compileToJar srcdir="${twist.src.dir}"
+                      destfile="${twist-fixtures.jar}"
+                      classpathref="twist-fixtures.build.classpath"/>
+        <jar destfile="${twist-fixtures.jar}" update="true">
+            <fileset dir="${twist.src.dir}" includes="*.xml"/>
+            <fileset dir="${twist.src.dir}" includes="*.properties"/>
+        </jar>
+    </target>
+
+    <target name="war" depends="jar" description="Create distributable package(s)">
+        <echo message="Packaging for build label ${build.label}"/>
+        <mkdir dir="${dist.dir}"/>
+
+        <war warfile="${main.war}" basedir="${webapp.dir}">
+            <manifest>
+                <attribute name="Label" value="${build.label}"/>
+            </manifest>
+            <lib refid="runtime.libraries"/>
+            <lib file="${main.jar}"/>
+            <classes dir="${main.resources.dir}"/>
+        </war>
+    </target>
+
+    <target name="unit-test" depends="unit-jar" description="Run unit tests">
+        <testAndReport type="unit" srcdir="${unit.src.dir}"
+                       classpathref="unit.runtime.classpath"/>
+    </target>
+
+    <target name="twist-test" depends="util-jar, twist-fixtures-jar, war" description="Run acceptance tests">
+        <jettyStartServer war="${main.war}" port="${application.twist_port}" stop-port="${application.twist_stop_port}" spawn="true"/>
+        <trycatch>
+            <try>
+                <!-- twist.runner doesn't provide a way to set working directory.
+                 This trick allows us to change the current working dir. -->
+                <ant antfile="${ant.file.videorental}" dir="${twist.dir}"
+                     inheritAll="all" inheritRefs="all" target="-execute-scenarios" >
+                    <property name="twist.dir" value="${twist.dir}"/>
+                    <property name="reports.dir" value="${reports.dir}"/>
+                    <property name="main.war" value="${main.war}"/>
+                    <reference refid="twist.runtime.classpath"/>
+                </ant>
+            </try>
+            <finally>
+                <jettyStopServer war="${main.war}" port="${application.twist_port}" stop-port="${application.twist_stop_port}" />
+            </finally>
+        </trycatch>
+    </target>
+
+    <target name="-execute-scenarios">
+        <mkdir dir="${reports.dir}/twist"/>
+        <twist.runner scenarioDir="${twist.dir}/scenarios"
+                      reportsDir="${reports.dir}/twist"
+                      confDir="${twist.dir}/twist-conf"
+                      failureproperty="twist.scenarios.failed"
+                      classpathref="twist.runtime.classpath"
+                      tags="!in-progress">
+            <sysproperty key="webapp.path" value="${main.war}" />
+        </twist.runner>
+        <fail if="twist.scenarios.failed"
+              message="One or more twist scenarios failed"/>
+    </target>
+
+    <!-- Helpers/Wrappers -->
+    <target name="build" depends="unit-test, twist-test, war"
+            description="Produce all artifacts"/>
+    <target name="rebuild" depends="clean, build"
+            description="Clean and build"/>
+
+    <target name="jetty" depends="war, util-jar"
+            description="Start jetty with application">
+        <jettyStartServer war="${main.war}"/>
+    </target>
+
+    <target name="jetty-twist" depends="war, util-jar"
+            description="Start jetty with application as required to run twist tests from IDE">
+        <jettyStartServer war="${main.war}" port="${application.twist_port}"/>
+    </target>
+</project>

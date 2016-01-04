@@ -1,0 +1,6 @@
+_ReSharper.VideoWorld/
+VideoWorld.sln.DotSettings.user
+*.Resharper.user
+*.suo
+*/bin
+*/obj

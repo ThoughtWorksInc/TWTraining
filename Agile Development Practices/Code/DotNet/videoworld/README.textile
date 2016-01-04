@@ -1,0 +1,51 @@
+h2. Frameworks
+
+NUNit
+https://launchpad.net/nunitv2
+
+Mock testing library : Moq
+http://code.google.com/p/moq/
+
+h2. ASP.NET MVC version 3
+
+http://www.asp.net/mvc/tutorials/creating-unit-tests-for-asp-net-mvc-applications-vb
+
+h2. UI testing
+
+http://www.specflow.org/
+http://smnbss.wordpress.com/2010/11/02/unveil-the-power-of-bdd-with-specflow-and-selenium-part-1/
+
+h2 Selenium v2 (Webdriver)
+
+We use selenium for testing the app. This can be kind of slow if you use Firefox or IE.
+
+You can use HtmlUnit via the RemoteDriver by uncommenting the appropriate code in SeleniumSupport.cs.
+Note that for this to work the selenium remote driver must be running. This is checked into the lib/test
+directory. You can run it by doing:
+
+	java -jar lib\test\selenium-server-standalone-2.0b2.jar
+
+h1. Notes on the Code
+
+h2. Code smells
+
+These are code smells that we might want to discuss with the participants
+
+h3. Prices
+
+* The IPrice.GetCharge method could be given a more descriptive name
+* The unit tests for the IPrice implementations only cover "normal" cases (no edge cases)
+* There are no tests for the frequent renter points in IPrice
+
+ h3. Movie
+
+* Movie has a price, as well as a get and set property
+* Movie allows a null price
+
+Take a look at MovieTests, there is a Law of Demeter violation :    	
+	
+	Assert.AreEqual(1, RegularMovieInstance.Price.GetFrequentRenterPoints(1));
+
+This chould be refactored to look like this:
+
+	Assert.AreEqual(1, RegularMovieInstance.GetFrequentRenterPoints(1));

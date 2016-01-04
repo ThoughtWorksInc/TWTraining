@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  applicationContext-suite.xml configures all beans with suite scope, for example drivers or the System Under Test itself.
+  The default name and classpath location of this file can be overridden by -DsuiteContext=
+  This can be used to run the same test suite against different configurations.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   	   http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+  <context:annotation-config/> 
+
+  <!-- You can leverage annotation based configuration by scanning for stereotype annotations like @Component.
+       You can autowire such components into Fixtures using @Autowired annotations. 
+    <context:component-scan base-package="org.example"/>
+  -->
+
+  <!--
+    The PropertyPlaceholderConfigurer loads properties from a file to be used in this configuration file.
+    The SYSTEM_PROPERTIES_MODE_OVERRIDE enables overriding property values from the command line.
+  -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+    <property name="locations">
+      <value>classpath:twist.properties</value>
+    </property>
+  </bean>
+
+
+  <!-- Uncomment the following bean definition to set system properties. You may delete the example entries -->
+  <!--
+  <bean id="systemproperty" class="com.thoughtworks.twist.core.SystemPropertyInitializingBean">
+    <property name="systemProperties">
+       <map>
+        <entry key="http.proxyHost" value="hostName"/>
+        <entry key="http.proxyPort" value="port"/>
+        <entry key="http.proxyUser" value="proxyUser"/>
+        <entry key="http.proxyPassword" value="proxyPassword"/>
+      </map>
+    </property>
+  </bean>
+  -->
+
+
+    <bean id="sahiDriverFactory" class="com.thoughtworks.twist.driver.sahi.DriverClient"
+        init-method="start" destroy-method="stop" lazy-init="true">
+        <property name="sahiBasePath" value="${sahi.basePath}"/>
+        <property name="sahiNTLM" value="${sahi.ntlm}"/>
+        <property name="sahiNTLMUser" value="${sahi.ntlm_user}"/>
+    </bean>
+    <bean id="browser" factory-bean="sahiDriverFactory" factory-method="getBrowser"
+        lazy-init="true" destroy-method="close" scope="prototype">
+        <constructor-arg value="${sahi.browserLocation}" />
+        <constructor-arg value="${sahi.browserExecutable}" />
+        <constructor-arg value="${sahi.browserOptions}" />
+    </bean>
+
+		<bean id="twistDataStoreFactory" class="com.thoughtworks.twist.core.execution.TwistDataStoreFactory">
+		</bean>
+		<bean id="twistSuiteStore" factory-bean="twistDataStoreFactory" 			factory-method="getSuiteStore"			scope="singleton">
+		</bean>
+</beans>
